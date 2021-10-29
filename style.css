@@ -1,0 +1,16 @@
+img{
+    width: 80px;
+    height: 80px;
+}
+#file{
+    display: inline-block;
+}
+textarea{
+    display: block;
+    resize: none;
+    width: 400px;
+    min-height: 300px;
+}
+#formblock{
+    display: block;
+}
