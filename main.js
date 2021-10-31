@@ -17,12 +17,14 @@ const InputFunction = () => {
 
 const createFolderButton = () => {
     let button = document.createElement('button');
+        button.setAttribute('id','FolderButton')
     button.appendChild(document.createTextNode('Создать папку'));
     return button;
 }
 
 const createFileButton = () => {
     let button = document.createElement('button');
+        button.setAttribute('id','FileButton')
     button.appendChild(document.createTextNode('Создать файл'));
     return button;
 
@@ -79,7 +81,10 @@ const FileCreate = () => {
     let img = document.createElement('img');
     img.setAttribute('src', 'https://icons-for-free.com/iconfiles/png/512/folder+icon-1320191242863903371.png')
     img.style.display = 'block';
+
     file.appendChild(img);
+
+
     return file;
 }
 const FolderCreate = () => {
@@ -107,43 +112,43 @@ const newArray = () => {
                 file.setAttribute('id', `${name.id}`)
                 let fileText = name.message;
                 let textAr = name.area;
-                let textArea = document.getElementById('text')
-                   if(name.id || name.type == 'File'){
-                       let urlParent = new URLSearchParams(window.location.search).get('id');
-                       console.log(urlParent)
-                        if(urlParent != null){
-                        
-                            
-                        let text = document.createElement('textarea')
-                            text.setAttribute('id','text')
-                            
-                       if(name.area != ''){
-                        text.appendChild(document.createTextNode(`${name.area}`))    
-                        }
-                        file.appendChild(text);    
-                               let button = document.createElement('button')
-                       button.addEventListener('click',function(){
-                          DataBase.map(function(name,key){
-                            name.area = text.value;
-                            console.log(DataBase)  
-                          })
-                                           
-                       })
-                       button.appendChild(document.createTextNode('сохранить'))
-                        file.appendChild(button)
-                            
-                        
-                    }   
-                        }
+
+                
+                
+//                   if(name.id || name.type == 'File'){
+//                       let urlParent = new URLSearchParams(window.location.search).get('id');
+//                   
+//                        if(urlParent != null){
+//                        
+//                            
+//                        let text = document.createElement('textarea')
+//                            text.setAttribute('id','text')
+//                            
+//                       if(name.area != ''){
+//                        text.appendChild(document.createTextNode(`${name.area}`))    
+//                        }
+//                        file.appendChild(text);    
+//                               let button = document.createElement('button')
+//                       button.addEventListener('click',function(){
+//                          DataBase.map(function(name,key){
+//                            name.area = text.value;
+//                            console.log(DataBase)  
+//                          })
+//                                           
+//                       })
+//                       button.appendChild(document.createTextNode('сохранить'))
+////                            button.setAttribute('id','Save')
+//                        file.appendChild(button)
+//                            
+//                        
+//                    }   
+//                        }
+                
                         
                      
                 file.addEventListener('dblclick', function () {
                     history.pushState({}, name.message, window.location.pathname + '?id=' + name.id);
-                    
-                        
-                    console.log(file)
-                    console.log()
-                       
+
                     Render()
                
                 })
@@ -160,6 +165,7 @@ const newArray = () => {
                 folder.setAttribute('id', `${name.id}`)
                 folder.addEventListener('dblclick', function () {
                     history.pushState({}, name.message, window.location.pathname + '?id=' + name.id)
+                    
                     Render()
                 })
 
@@ -181,20 +187,65 @@ const App = () => {
     window.addEventListener('pushstate', function () {
         Render();
     })
-    
-    let form = FormEquipment();
+
+   
     let currentItem = DataBase.filter(function (item) {
         const parent_id = new URLSearchParams(window.location.search).get('id');
         if (item.id == parent_id) {
             return true;
         }
     })[0];
+   
     
-    let FileAndFolder = newArray();
     let Applicatinon = document.createElement('div');
     Applicatinon.setAttribute('id', 'Applicatinon');
+  let form = FormEquipment();
     Applicatinon.appendChild(form);
+      let FileAndFolder = newArray(); 
+    
     Applicatinon.appendChild(FileAndFolder);
+     for (let name of DataBase) {
+         
+
+         if (name.type == 'File') {
+             
+             console.log(form)
+             form.parentNode.removeChild(form)
+             let urlParent = new URLSearchParams(window.location.search).get('id');
+
+             if (urlParent != null) {
+
+
+                 let text = document.createElement('textarea')
+                 text.setAttribute('id', 'text')
+
+                 if (name.area != '') {
+                     text.appendChild(document.createTextNode(`${name.area}`))
+                 }
+                 FileAndFolder.appendChild(text);
+                 let button = document.createElement('button')
+                 button.addEventListener('click', function () {
+                     DataBase.map(function (name, key) {
+                         name.area = text.value;
+                         console.log(DataBase)
+                     })
+
+                 })
+                 button.appendChild(document.createTextNode('сохранить'))
+                 //                            button.setAttribute('id','Save')
+                 FileAndFolder.appendChild(button)
+
+                 
+             }else if(name.type == 'Folder'){
+                 console.log(form)
+             }
+         }
+
+     }
+    
+   
+    
+    
     return Applicatinon;
 }
 Render();
